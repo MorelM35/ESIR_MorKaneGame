@@ -26,9 +26,13 @@ public class MainGUI extends Composite {
 		this.txt= new TextBox();
 		this.vPanel.add(txt);
 		
-		Button btn = new Button("SayHello");
+		Button btn = new Button("Write to DB");
 		this.vPanel.add(btn);
 		btn.addClickHandler(new BtnClickHandler());
+		
+		Button btn1 = new Button("Read from DB");
+		this.vPanel.add(btn1);
+		btn1.addClickHandler(new Btn1ClickHandler());
 		
 		label = new Label();
 		label.setText("Wait ...");
@@ -44,7 +48,16 @@ public class MainGUI extends Composite {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			serviceImpl.sayHello(txt.getText());
+			serviceImpl.HelloWho(txt.getText());
+		}
+		
+	}
+	
+	private class Btn1ClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			serviceImpl.sayHello();
 		}
 		
 	}
