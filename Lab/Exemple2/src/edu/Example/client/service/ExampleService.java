@@ -5,5 +5,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("exampleservice")
 public interface ExampleService extends RemoteService {
-	String sayHello(String name);
+	String sayHello();
+	void HelloWho(String name);
 }
