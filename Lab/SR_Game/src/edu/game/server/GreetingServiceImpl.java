@@ -51,10 +51,10 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			}			
 		}
 		_grid[0][4]=1;
-		_grid[1][18]=1;
+		_grid[1][10]=1;
 		_grid[18][5]=1;
 		_grid[12][12]=1;
-		_grid[20][3]=1;
+		_grid[19][3]=1;
 		_grid[6][2]=1;
 		_grid[4][7]=1;
 	}
