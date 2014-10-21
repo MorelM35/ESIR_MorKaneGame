@@ -23,8 +23,13 @@ private MainGUI main;
 	}
 
 	@Override
-	public void sayHello(String name) {
-		this.service.sayHello(name, new DefaultCallBack());
+	public void sayHello() {
+		this.service.sayHello(new DefaultCallBack());
+	}
+	
+	@Override
+	public void HelloWho(String name) {
+		this.service.HelloWho(name, new DefaultCallBack());
 	}
 	
 	private class DefaultCallBack implements AsyncCallback{
