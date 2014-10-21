@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.game.client.ClientImpl;
 import edu.game.client.ClientInt;
 
-public class ClientGUI extends Composite implements ClientInt {
+public class ClientGUI extends Composite  {
 	private ClientImpl _controle;
 	
 	public ClientGUI(ClientImpl controle) {
@@ -15,30 +15,11 @@ public class ClientGUI extends Composite implements ClientInt {
 		VerticalPanel vPanel = new VerticalPanel();
 		initWidget(vPanel);
 		
-		// TODO Auto-generated constructor stub
+		// TODO Init Window
+		// answer from the method : _controle.getGrid() is the call of the method : update(grid) of this class
 	}
 
-	@Override
-	public void moveUp() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveDown() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveLeft() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveRight() {
-		// TODO Auto-generated method stub
-		
+	public void update(int[][] grid){
+		// TODO : update Grid with this new grid
 	}
 }

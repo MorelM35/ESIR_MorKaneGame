@@ -9,9 +9,13 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
+	private int _gridx = 20;
+	private int _gridy = 20;
+	private int[][] _grid;
 		
 	public GreetingServiceImpl() {
-		// TODO Auto-generated constructor stub
+		_grid=new int[_gridx][_gridy];
+		InitGrid();
 	}
 	
 	@Override
@@ -36,5 +40,27 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public boolean moveRight() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	// Put cookies in the grid
+	private void InitGrid(){
+		//TODO : do random init
+		for(int i=0;i<_gridx;i++){
+			for(int j=0;j<_gridy;j++){
+				_grid[i][j]=0;
+			}			
+		}
+		_grid[0][4]=1;
+		_grid[1][18]=1;
+		_grid[18][5]=1;
+		_grid[12][12]=1;
+		_grid[20][3]=1;
+		_grid[6][2]=1;
+		_grid[4][7]=1;
+	}
+
+	@Override
+	public int[][] getGrid() {
+		return _grid;
 	}
 }

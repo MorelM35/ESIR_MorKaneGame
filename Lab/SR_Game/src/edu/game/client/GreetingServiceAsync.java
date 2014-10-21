@@ -11,4 +11,6 @@ public interface GreetingServiceAsync {
 	void moveDown(AsyncCallback callback);
 	void moveLeft(AsyncCallback callback);
 	void moveRight(AsyncCallback callback);
+	
+	void getGrid(AsyncCallback callback);
 }

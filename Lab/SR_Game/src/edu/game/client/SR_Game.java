@@ -35,6 +35,7 @@ public class SR_Game implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		
+		ClientImpl client = new ClientImpl(GWT.getModuleBaseURL()+"game");
+		RootPanel.get().add(client.getGUI());
 	}
 }

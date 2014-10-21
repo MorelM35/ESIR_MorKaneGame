@@ -13,7 +13,7 @@
   
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/sr_game/greet</url-pattern>
+    <url-pattern>/sr_game/game</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

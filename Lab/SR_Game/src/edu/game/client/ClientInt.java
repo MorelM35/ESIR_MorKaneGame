@@ -8,4 +8,6 @@ public interface ClientInt {
 	void moveDown();
 	void moveLeft();
 	void moveRight();
+	
+	void getGrid();
 }

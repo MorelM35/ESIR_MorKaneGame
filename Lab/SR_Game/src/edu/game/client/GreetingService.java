@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 /**
  * The client-side stub for the RPC service.
  */
-@RemoteServiceRelativePath("greet")
+@RemoteServiceRelativePath("game")
 public interface GreetingService extends RemoteService {
 	
 	// Different Move offered to Client
@@ -14,5 +14,8 @@ public interface GreetingService extends RemoteService {
 	boolean moveDown();
 	boolean moveLeft();
 	boolean moveRight();
+	
+	// Test between us
+	int[][] getGrid();
 	
 }
