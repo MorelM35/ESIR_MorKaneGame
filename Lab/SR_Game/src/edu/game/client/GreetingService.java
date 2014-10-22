@@ -10,12 +10,14 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GreetingService extends RemoteService {
 	
 	// Different Move offered to Client
-	boolean moveUp();
-	boolean moveDown();
-	boolean moveLeft();
-	boolean moveRight();
+	boolean moveUp(byte myID);
+	boolean moveDown(byte myID);
+	boolean moveLeft(byte myID);
+	boolean moveRight(byte myID);
 	
 	// Test between us
-	int[][] getGrid();
+	byte[][] getGrid();
+	
+	byte registerMe();
 	
 }

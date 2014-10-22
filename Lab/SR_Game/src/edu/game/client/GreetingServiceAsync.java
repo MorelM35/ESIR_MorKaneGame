@@ -7,10 +7,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface GreetingServiceAsync {
 	
-	void moveUp(AsyncCallback callback);
-	void moveDown(AsyncCallback callback);
-	void moveLeft(AsyncCallback callback);
-	void moveRight(AsyncCallback callback);
+	void moveUp(byte myID,AsyncCallback callback);
+	void moveDown(byte myID,AsyncCallback callback);
+	void moveLeft(byte myID,AsyncCallback callback);
+	void moveRight(byte myID,AsyncCallback callback);
 	
 	void getGrid(AsyncCallback callback);
+	void registerMe(AsyncCallback callback);
 }
