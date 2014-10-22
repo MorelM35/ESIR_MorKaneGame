@@ -67,11 +67,11 @@ public class ClientImpl implements ClientInt{
 
 		@Override
 		public void onSuccess(Object result) {
-			if(result instanceof Integer){
+			if(result instanceof int[][]){
 				System.out.println("Tableau");
+				update((int[][])result);
 			}else {
 				System.out.println("Nothing");
-				update((int[][])result);
 			}
 		}
 		
