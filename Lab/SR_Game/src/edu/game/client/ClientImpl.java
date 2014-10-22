@@ -67,6 +67,11 @@ public class ClientImpl implements ClientInt{
 			System.out.println("DEBUG : "+msg);
 		}
 	}
+	
+	@Override
+	public void getScore() {
+		_service.getScore(new DefaultCallBack());		
+	}
 
 	// ##############################################################
 	// ######################	CallBack	#########################
@@ -83,6 +88,7 @@ public class ClientImpl implements ClientInt{
 		public void onSuccess(Object result) {
 			if(result instanceof Byte){
 				_myID= (Byte) result;
+				_vue.setNameOfPlayer(""+_myID);
 				_trace("myID = "+_myID);
 			}
 		}
@@ -99,14 +105,19 @@ public class ClientImpl implements ClientInt{
 
 		@Override
 		public void onSuccess(Object result) {
-			if(result instanceof byte[][]){
-				_vue.update((byte[][])result);
+			if(result instanceof byte[][]){	
+				_vue.updateGrid((byte[][])result);
 			}else if (result instanceof Boolean){
-				//getGrid();
+				// TODO Maybe delete when WebSocket
+				getGrid();
+				getScore();
+			}else if (result instanceof short[]){
+				_vue.updateScore((short[])result);
 			}else{
 				_trace("DefaultCallBack Nothing");
 			}
 		}
 
 	}
+
 }
