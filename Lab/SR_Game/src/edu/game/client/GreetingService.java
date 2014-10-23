@@ -16,7 +16,8 @@ public interface GreetingService extends RemoteService {
 	boolean moveRight(byte myID);
 	
 	// Test between us
-	byte[][] getGrid();
+	byte[][] 	getGrid();
+	short[] 	getScore();
 	
 	byte registerMe();
 	

@@ -15,19 +15,29 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	private final short _nbMaxPlayers = 4;
 	private int _gridx = 20;
 	private int _gridy = 20;
-	private int _nbCookies = 50;
+	private int _nbCookies = 300;
 	private byte _nbPlayers;
 	private HashMap<Byte,int[]> _mapPlayers;
 	private byte[][] _grid;
+	private short[] _score;
 
 	/**
 	 * Constructor avec This server
 	 */
 	public GreetingServiceImpl() {
 		_nbPlayers = 0;
+		_score = new short[_nbMaxPlayers];
 		_grid=new byte[_gridx][_gridy];
 		_mapPlayers = new HashMap<Byte,int[]>();
+		
+		initGame();
+	}
+	
+	private void initGame(){
 		initGrid(_nbCookies);
+		for(int i=0;i<_nbMaxPlayers;i++){
+			_score[i]=0;
+		}
 	}
 
 	/**
@@ -81,7 +91,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			int x = r.nextInt(_gridx);	
 			int y = r.nextInt(_gridy);
 			//System.out.println("Cookie "+x+":"+y);
-			if(_grid[x][y]==1) i--;
+			if(_grid[x][y]==1) {i--;}
 			else _grid[x][y]=1;
 		}
 	}
@@ -104,7 +114,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	private boolean movePlayerTo(byte myID, int[] oldCoord,int[] newCoord){
 		if(isPossibleToMove(newCoord)){
 			if(_grid[newCoord[0]][newCoord[1]]==1){ // There is a cookie
-				// TODO : Score for each players
+				_score[myID-1]+=1;
 			}
 			_grid[oldCoord[0]][oldCoord[1]] = 0;
 			_grid[newCoord[0]][newCoord[1]] = (byte) (myID+10);
@@ -163,5 +173,10 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	@Override
 	public byte[][] getGrid() {
 		return _grid;
+	}
+
+	@Override
+	public short[] getScore() {
+		return _score;
 	}
 }

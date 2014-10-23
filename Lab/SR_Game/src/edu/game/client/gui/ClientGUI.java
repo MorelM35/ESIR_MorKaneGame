@@ -25,6 +25,8 @@ public class ClientGUI extends Composite  {
 		
 		initWidget(vPanel);
 		
+		
+		
 		label=new Label("Spectator ...");
 		vPanel.add(label);
 		
@@ -74,6 +76,7 @@ public class ClientGUI extends Composite  {
 	 * @param name
 	 */
 	public void setNameOfPlayer(String name){
+		if(name.equals("-1")) name = "(mode Spectator)";
 		label.setText("> Player "+name);
 	}
 	
@@ -115,7 +118,7 @@ public class ClientGUI extends Composite  {
 		s+="\n¤ Player 3 : "+result[2];	
 		s+="\n¤ Player 4 : "+result[3];	
 		
-		System.out.println(s);
+		//System.out.println(s);
 		txtScore.setText(s);
 	}
 
