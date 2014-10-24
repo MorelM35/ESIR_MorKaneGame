@@ -1,0 +1,2 @@
+serviceClass: edu.game.client.GreetingService
+path: 8E03B46A3DAA866AC6469686C9E900CA.gwt.rpc

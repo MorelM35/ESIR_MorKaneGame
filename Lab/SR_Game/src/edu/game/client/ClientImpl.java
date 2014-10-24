@@ -8,9 +8,15 @@ import edu.game.client.gui.ClientGUI;
 
 
 public class ClientImpl implements ClientInt{
+
+	private static boolean debug = true;
+
+
+	/**
+	 * Create a remote service proxy to talk to the server-side Greeting service.
+	 */
 	private final GreetingServiceAsync _service;
-	private final boolean debug = true;
-	
+
 	private ClientGUI _vue;
 	private byte _myID =0;
 
@@ -22,10 +28,7 @@ public class ClientImpl implements ClientInt{
 		this._vue = new ClientGUI(this);
 
 		_service.registerMe(new getID_CallBack());
-		
-		// Init GUI
 		getGrid();
-		getScore();
 	}
 
 	@Override

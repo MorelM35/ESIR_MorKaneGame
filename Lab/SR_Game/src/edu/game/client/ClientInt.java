@@ -10,5 +10,4 @@ public interface ClientInt {
 	void moveRight();
 	
 	void getGrid();
-	void getScore();
 }

@@ -13,6 +13,5 @@ public interface GreetingServiceAsync {
 	void moveRight(byte myID,AsyncCallback callback);
 	
 	void getGrid(AsyncCallback callback);
-	void getScore(AsyncCallback callback);
 	void registerMe(AsyncCallback callback);
 }
