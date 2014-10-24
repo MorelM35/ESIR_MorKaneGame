@@ -14,4 +14,5 @@ public interface GreetingServiceAsync {
 	
 	void getGrid(AsyncCallback callback);
 	void registerMe(AsyncCallback callback);
+	void getScore(AsyncCallback defaultCallBack);
 }

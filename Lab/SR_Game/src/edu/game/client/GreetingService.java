@@ -1,5 +1,6 @@
 package edu.game.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -17,6 +18,7 @@ public interface GreetingService extends RemoteService {
 	
 	// Test between us
 	byte[][] getGrid();
+	short[] getScore();
 	
 	byte registerMe();
 	

@@ -19,6 +19,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	private byte _nbPlayers;
 	private HashMap<Byte,int[]> _mapPlayers;
 	private byte[][] _grid;
+	private short[] _score;
 
 	/**
 	 * Constructor avec This server
@@ -26,8 +27,16 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	public GreetingServiceImpl() {
 		_nbPlayers = 0;
 		_grid=new byte[_gridx][_gridy];
+		_score = new short[_nbMaxPlayers];
 		_mapPlayers = new HashMap<Byte,int[]>();
+		init();
+	}
+	
+	public void init(){
 		initGrid(_nbCookies);
+		for(int i=0;i<_nbMaxPlayers;i++){
+			_score[i]=0;
+		}
 	}
 
 	/**
@@ -104,7 +113,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	private boolean movePlayerTo(byte myID, int[] oldCoord,int[] newCoord){
 		if(isPossibleToMove(newCoord)){
 			if(_grid[newCoord[0]][newCoord[1]]==1){ // There is a cookie
-				// TODO : Score for each players
+				_score[myID]++;
 			}
 			_grid[oldCoord[0]][oldCoord[1]] = 0;
 			_grid[newCoord[0]][newCoord[1]] = (byte) (myID+10);
@@ -163,5 +172,11 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	@Override
 	public byte[][] getGrid() {
 		return _grid;
+	}
+
+	@Override
+	public short[] getScore() {
+		return _score;
+		
 	}
 }
