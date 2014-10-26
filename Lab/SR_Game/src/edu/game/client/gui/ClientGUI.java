@@ -115,7 +115,7 @@ public class ClientGUI extends Composite  {
 		s+="\n¤ Player 3 : "+result[2];	
 		s+="\n¤ Player 4 : "+result[3];	
 		
-		System.out.println(s);
+		//System.out.println(s);
 		txtScore.setText(s);
 	}
 

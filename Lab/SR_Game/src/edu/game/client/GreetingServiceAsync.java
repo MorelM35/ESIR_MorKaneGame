@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * The async counterpart of <code>GreetingService</code>.
  */
 public interface GreetingServiceAsync {
+	void disconnectMe(byte myID,AsyncCallback callback)throws Exception;;
 	
 	void moveUp(byte myID,AsyncCallback callback);
 	void moveDown(byte myID,AsyncCallback callback);

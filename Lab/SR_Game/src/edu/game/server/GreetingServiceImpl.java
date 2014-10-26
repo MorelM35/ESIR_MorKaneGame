@@ -1,22 +1,26 @@
 package edu.game.server;
 
+
 import java.util.Random;
 import java.util.HashMap;
 
-import edu.game.client.GreetingService;
+import com.google.gwt.dev.shell.BrowserChannel.SessionHandler.ExceptionOrReturnValue;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.service.RemoteEventServiceServlet;
+import edu.game.client.GreetingService;
+import edu.game.client.event.MoveEvent;
+
 
 /**
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
+public class GreetingServiceImpl extends RemoteEventServiceServlet implements GreetingService {
 	private final short _nbMaxPlayers = 4;
 	private int _gridx = 20;
 	private int _gridy = 20;
 	private int _nbCookies = 50;
-	private byte _nbPlayers;
 	private HashMap<Byte,int[]> _mapPlayers;
 	private byte[][] _grid;
 	private short[] _score;
@@ -25,7 +29,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	 * Constructor avec This server
 	 */
 	public GreetingServiceImpl() {
-		_nbPlayers = 0;
 		_grid=new byte[_gridx][_gridy];
 		_score = new short[_nbMaxPlayers];
 		_mapPlayers = new HashMap<Byte,int[]>();
@@ -72,6 +75,21 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		return coord;
 	}
 
+	/**
+	 * Remove player of the game
+	 * @param myID	: ID player
+	 * @throws Exception 
+	 */
+	private void removePlayer(byte myID) throws Exception {
+		int[] coord= _mapPlayers.get(myID);
+		if(coord!=null){
+			_grid[coord[0]][coord[1]]=0;
+			_score[myID-1]=0;
+			_mapPlayers.remove(myID);
+			System.out.println("remove Player "+myID);
+		} else throw new Exception("Wrong ID");
+		
+	}
 
 	/**
 	 * Initialise the grid with cookies 
@@ -113,15 +131,22 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	private boolean movePlayerTo(byte myID, int[] oldCoord,int[] newCoord){
 		if(isPossibleToMove(newCoord)){
 			if(_grid[newCoord[0]][newCoord[1]]==1){ // There is a cookie
-				_score[myID]++;
+				_score[myID-1]++;
 			}
 			_grid[oldCoord[0]][oldCoord[1]] = 0;
 			_grid[newCoord[0]][newCoord[1]] = (byte) (myID+10);
 			_mapPlayers.put(myID, newCoord);
+			
+			Event event = new MoveEvent(_grid);
+			sendToClients(event);
 			return true;
 		}
 		return false;
 	}
+	
+	private void sendToClients(Event event){
+        addEvent(GreetingService.SERVER_MESSAGE_DOMAIN, event);
+    }
 
 
 	// ##############################################################
@@ -134,9 +159,12 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	 */
 	public byte registerMe(){
 		if(_mapPlayers.size()<_nbMaxPlayers){
-			_nbPlayers++;
-			newPlayer(_nbPlayers);
-			return _nbPlayers;
+			for(byte i=1;i<_nbMaxPlayers;i++){
+				if(!_mapPlayers.containsKey(i)){
+					newPlayer(i);
+					return i;
+				}
+			}
 		}
 		return -1;	// the grid is full of players
 	}
@@ -179,4 +207,13 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		return _score;
 		
 	}
+
+	@Override
+	public void disconnectMe(byte myID) throws Exception {
+		assert myID >0 				: "myID : Incorrect Data";
+		assert myID <_nbMaxPlayers 	: "myID : Incorrect Data";
+		
+		removePlayer(myID);
+	}
+
 }
