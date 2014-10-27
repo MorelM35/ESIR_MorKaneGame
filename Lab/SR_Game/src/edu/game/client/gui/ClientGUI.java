@@ -1,10 +1,12 @@
 package edu.game.client.gui;
 
+import com.google.gwt.aria.client.AlertdialogRole;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -74,6 +76,7 @@ public class ClientGUI extends Composite  {
 	 * @param name
 	 */
 	public void setNameOfPlayer(String name){
+		if(name=="-1") name="Spectator";
 		label.setText("> Player "+name);
 	}
 	
@@ -117,6 +120,12 @@ public class ClientGUI extends Composite  {
 		
 		//System.out.println(s);
 		txtScore.setText(s);
+	}
+	
+	public void showEndGame(String winnerPlayer){
+		PopupPanel popupPanel = new PopupPanel();
+		popupPanel.add(new Label("!! Game Over !!\n > The Winner is "+winnerPlayer+" !!!"));
+		popupPanel.show();
 	}
 
 }

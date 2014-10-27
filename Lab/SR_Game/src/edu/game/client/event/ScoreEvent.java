@@ -3,21 +3,21 @@ package edu.game.client.event;
 import de.novanic.eventservice.client.event.Event;
 
 public class ScoreEvent implements Event {
-	protected String message = null;
+	protected short[] _score = null;
 	 
 	public ScoreEvent(){}
 	
-    public String getMessage() {
-        return message;
+    public short[] getScore() {
+        return _score;
     }
  
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(short[] score) {
+        this._score = score;
     }
  
-    public ScoreEvent(String message){
+    public ScoreEvent(short[] score){
         super();
  
-        this.message = message;
+        this._score = score;
     }
 }

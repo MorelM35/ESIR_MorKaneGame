@@ -10,6 +10,7 @@ import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+import edu.game.client.event.EndGameEvent;
 import edu.game.client.event.MoveEvent;
 import edu.game.client.event.ScoreEvent;
 import edu.game.client.gui.ClientGUI;
@@ -41,10 +42,12 @@ public class ClientImpl implements ClientInt{
 			@Override
 			public void apply(Event anEvent) {
 				if(anEvent instanceof MoveEvent){ 			// If Event on movement of players
-					_trace("Event : new Movement");
+					//_trace("Event : new Movement");
 					_vue.updateGrid(((MoveEvent)anEvent).getGrid());
 				}else if (anEvent instanceof ScoreEvent){ 	// If event on update of score
-
+					_vue.updateScore(((ScoreEvent)anEvent).getScore());
+				}else if (anEvent instanceof EndGameEvent){ // If event on End Game
+					_vue.showEndGame(((EndGameEvent)anEvent).getMessage());
 				}else{
 					System.err.println("Erreur RemoteEventService::Apply");
 				}
@@ -153,7 +156,7 @@ public class ClientImpl implements ClientInt{
 			}else if (result instanceof Boolean){
 				// TODO Maybe delete when WebSocket
 				//getGrid();
-				getScore();
+				//getScore();
 			}else if (result instanceof short[]){
 				_vue.updateScore((short[])result);
 			}else{

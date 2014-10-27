@@ -17,6 +17,7 @@
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
+  
   <!-- Other module inherits                                      -->
   <inherits name='com.google.gwt.user.User' />
   <inherits name='com.google.gwt.xml.XML' />
@@ -31,4 +32,9 @@
 
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>
+  <set-configuration-property name="devModeRedirectEnabled" value="true"/>
+  <set-property name="compiler.useSourceMaps" value="true"/>
+  <!--  
+  <set-configuration-property name="devModeUrlWhitelistRegexp" value="http://(mymachinename|192\.168\.1\.13)(:\d+)?/.*" />
+  -->
 </module>

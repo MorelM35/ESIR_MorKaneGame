@@ -9,7 +9,9 @@ import com.google.gwt.dev.shell.BrowserChannel.SessionHandler.ExceptionOrReturnV
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.service.RemoteEventServiceServlet;
 import edu.game.client.GreetingService;
+import edu.game.client.event.EndGameEvent;
 import edu.game.client.event.MoveEvent;
+import edu.game.client.event.ScoreEvent;
 
 
 /**
@@ -17,10 +19,13 @@ import edu.game.client.event.MoveEvent;
  */
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteEventServiceServlet implements GreetingService {
+	// Variables
 	private final short _nbMaxPlayers = 4;
-	private int _gridx = 20;
-	private int _gridy = 20;
-	private int _nbCookies = 50;
+	private final int _gridx = 20;
+	private final int _gridy = 20;
+	private final int _nbInitCookie = 200;
+	
+	private int _nbCookies;
 	private HashMap<Byte,int[]> _mapPlayers;
 	private byte[][] _grid;
 	private short[] _score;
@@ -35,8 +40,11 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		init();
 	}
 	
+	/**
+	 * Init Grid
+	 */
 	public void init(){
-		initGrid(_nbCookies);
+		initGrid(_nbInitCookie);
 		for(int i=0;i<_nbMaxPlayers;i++){
 			_score[i]=0;
 		}
@@ -95,7 +103,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	 * Initialise the grid with cookies 
 	 * @param nbCookies : number of cookies to put
 	 */
-	private void initGrid(int nbCookies){
+	public int initGrid(int nbCookies){
 		//Init empty grid
 		for(int i=0;i<_gridx;i++){
 			for(int j=0;j<_gridy;j++){
@@ -104,21 +112,45 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		}
 		// add cookies in the grid
 		Random r = new Random();
-		for(int i=0;i<nbCookies;i++){
+		_nbCookies=0;
+		while(_nbCookies!=nbCookies){
 			int x = r.nextInt(_gridx);	
 			int y = r.nextInt(_gridy);
-			//System.out.println("Cookie "+x+":"+y);
-			if(_grid[x][y]==1) i--;
-			else _grid[x][y]=1;
+			if(!(x==0 & (y==0 |y==_gridy-1))){		// if the place is not a place for player
+				if(!(x==_gridx-1 & (y==0 |y==_gridy-1))){
+					if(_grid[x][y]==0){				// If the place is empty
+						_grid[x][y]=1;
+						_nbCookies++;
+					}
+				}
+			}
 		}
+		return _nbCookies;
 	}
 
 	private boolean isInOfRange(int [] coord){
-		return !(coord[0]<0 & coord[0]>_gridx & coord[1]>_gridy & coord[1]<0);
+		return !(coord[0]<0 || coord[0]>_gridx-1 || coord[1]>_gridy-1 || coord[1]<0);
 	}
 
-	private boolean isPossibleToMove(int[] coord){
-		return isInOfRange(coord)&_grid[coord[0]][coord[1]] <2;
+	public boolean isPossibleToMove(int[] coord){
+		if(isInOfRange(coord)){
+			//System.out.println("try to move ("+coord[0]+":"+coord[1]+")");
+			return _grid[coord[0]][coord[1]] <2;
+		} else return false;
+	}
+	
+	/**
+	 * When a player eat a cookie on the grid
+	 * @param nID
+	 */
+	private void eatCookie(byte nID){
+		_score[nID-1]++;
+		_nbCookies--;
+		// Send info to Client
+		sendToClients(new ScoreEvent(_score));
+		if(_nbCookies<=0){
+			sendToClients(new EndGameEvent("Player "+nID));
+		}
 	}
 
 	/**
@@ -131,7 +163,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	private boolean movePlayerTo(byte myID, int[] oldCoord,int[] newCoord){
 		if(isPossibleToMove(newCoord)){
 			if(_grid[newCoord[0]][newCoord[1]]==1){ // There is a cookie
-				_score[myID-1]++;
+				eatCookie(myID);
 			}
 			_grid[oldCoord[0]][oldCoord[1]] = 0;
 			_grid[newCoord[0]][newCoord[1]] = (byte) (myID+10);
@@ -159,7 +191,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	 */
 	public byte registerMe(){
 		if(_mapPlayers.size()<_nbMaxPlayers){
-			for(byte i=1;i<_nbMaxPlayers;i++){
+			for(byte i=1;i<_nbMaxPlayers+1;i++){
 				if(!_mapPlayers.containsKey(i)){
 					newPlayer(i);
 					return i;
@@ -205,7 +237,6 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	@Override
 	public short[] getScore() {
 		return _score;
-		
 	}
 
 	@Override
