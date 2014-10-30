@@ -1,9 +1,11 @@
 package edu.game.client.gui;
 
+
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
@@ -31,7 +33,7 @@ public class ClientGUI extends Composite  {
 		
 		// Init window TextArea
 		txt= new TextArea();
-		txt.setPixelSize(1000,400);
+		txt.setPixelSize(1000,380);
 		txt.setAlignment(TextAlignment.CENTER);
 		txt.setReadOnly(true);
 		txt.setText("Loading...");
@@ -53,6 +55,9 @@ public class ClientGUI extends Composite  {
 				case KeyCodes.KEY_RIGHT:
 					_controle.moveRight();
 					break;
+				case KeyCodes.KEY_A:
+					_controle.play();
+					break;
 				}
 			}
 		});
@@ -63,7 +68,6 @@ public class ClientGUI extends Composite  {
 		txtScore.setReadOnly(true);
 		txtScore.setText("Loading Score...");
 		vPanel.add(txtScore);
-		
 		
 		// TODO Init Window
 		//_controle.getGrid();
@@ -88,7 +92,20 @@ public class ClientGUI extends Composite  {
 		String s="";
 		for(int i=0;i<dim;i++){
 			for(int j=0; j<dim;j++){
-				s+=newGrid[j][i]+"\t";
+				byte var = newGrid[j][i];
+				switch(var){
+				case 0:
+					s+=" \t";
+					break;
+				case 1:
+					s+=var+"\t";
+					break;
+				case 2:
+					s+="X\t";
+					break;
+				default:
+					s+=var+"\t";
+				}				
 			}
 			s+="\n";
 		}	
@@ -107,10 +124,13 @@ public class ClientGUI extends Composite  {
 		txtScore.setText(s);
 	}
 	
-	public void showEndGame(String winnerPlayer){
-		PopupPanel popupPanel = new PopupPanel();
-		popupPanel.add(new Label("!! Game Over !!\n > The Winner is "+winnerPlayer+" !!!"));
-		popupPanel.show();
+	public void showEndGame(String winnerPlayer){		
+		// TODO : if player want re-play
+		DialogBox dialog = new DialogBox(true);
+		dialog.setTitle("!!! Game Over !!!!");
+		dialog.setText("The winner of this game is "+winnerPlayer+"\n Congratulation!\n Click on OK to continue");
+		dialog.showRelativeTo(txt);
+
 	}
 
 }

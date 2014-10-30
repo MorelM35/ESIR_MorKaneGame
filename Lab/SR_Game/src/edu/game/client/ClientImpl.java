@@ -10,7 +10,7 @@ import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-import edu.game.client.event.EndGameEvent;
+import edu.game.client.event.GameOverEvent;
 import edu.game.client.event.MoveEvent;
 import edu.game.client.event.ScoreEvent;
 import edu.game.client.gui.ClientGUI;
@@ -20,14 +20,13 @@ public class ClientImpl implements ClientInt{
 
 	private static boolean debug = true;
 
-
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
 	private final GreetingServiceAsync _service;
 
-	private ClientGUI _vue;
-	private byte _myID =0;
+	private ClientGUI 	_vue;
+	private byte 		_myID =0;
 
 	public ClientImpl(String url) {
 		System.out.println("url : "+url);
@@ -46,8 +45,11 @@ public class ClientImpl implements ClientInt{
 					_vue.updateGrid(((MoveEvent)anEvent).getGrid());
 				}else if (anEvent instanceof ScoreEvent){ 	// If event on update of score
 					_vue.updateScore(((ScoreEvent)anEvent).getScore());
-				}else if (anEvent instanceof EndGameEvent){ // If event on End Game
-					_vue.showEndGame(((EndGameEvent)anEvent).getMessage());
+				}else if (anEvent instanceof GameOverEvent){ // If event on End Game
+					_vue.showEndGame(((GameOverEvent)anEvent).getMessage());
+					_myID=-1;
+					_vue.setNameOfPlayer("Spectator");
+					getGrid();
 				}else{
 					System.err.println("Erreur RemoteEventService::Apply");
 				}
@@ -58,16 +60,17 @@ public class ClientImpl implements ClientInt{
 		Window.addWindowClosingHandler(new Window.ClosingHandler() {
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
-				try {
-					_service.disconnectMe(_myID, new DefaultCallBack());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				try {_service.disconnectMe(_myID, new DefaultCallBack());} catch (Exception e) {e.printStackTrace();}
 			}
         });
 		
+		play();
+	}
+	
+	public void play(){
 		_service.registerMe(new getID_CallBack());
 		getGrid();
+		getScore();
 	}
 
 	@Override
@@ -118,6 +121,7 @@ public class ClientImpl implements ClientInt{
 	public void getScore() {
 		_service.getScore(new DefaultCallBack());		
 	}
+	
 
 	// ##############################################################
 	// ######################	CallBack	#########################

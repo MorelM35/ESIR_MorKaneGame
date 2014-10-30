@@ -1,4 +1,4 @@
 # Module sr_game
 # RPC service class, partial path of RPC policy file
 edu.game.client.GreetingService, 172286A6BAAB289D69AC856CE5D20474.gwt.rpc
-de.novanic.eventservice.client.event.service.EventService, 78DE852BBDA420812120C883E16D750A.gwt.rpc
+de.novanic.eventservice.client.event.service.EventService, F6C2084A60ABF945B78719CFF4D0E1F5.gwt.rpc
