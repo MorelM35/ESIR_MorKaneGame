@@ -1,6 +1,5 @@
 package edu.game.client.gui;
 
-import com.google.gwt.aria.client.AlertdialogRole;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -85,8 +84,6 @@ public class ClientGUI extends Composite  {
 	 * @param newGrid : 
 	 */
 	public void updateGrid(byte[][] newGrid){
-		// TODO : update Grid with this new grid
-		//showInConsole(result);
 		int dim = newGrid.length;
 		String s="";
 		for(int i=0;i<dim;i++){
@@ -98,18 +95,6 @@ public class ClientGUI extends Composite  {
 		txt.setText(s);
 	}
 	
-	public void showInConsole(byte[][] result){
-		int dim = result.length;
-		String s="";
-		System.out.println("############################# Grille Textuelle #############################");
-		for(int i=0;i<dim;i++){
-			for(int j=0; j<dim;j++){
-				s+=result[j][i]+"\t";
-			}
-			s+="\n";
-		}	
-		System.out.println(s+"############################################################################");
-	}
 
 	public void updateScore(short[] result) {
 		String s = "~~~~~  Table Of Score  ~~~~~";

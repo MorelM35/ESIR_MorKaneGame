@@ -149,7 +149,15 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		// Send info to Client
 		sendToClients(new ScoreEvent(_score));
 		if(_nbCookies<=0){
-			sendToClients(new EndGameEvent("Player "+nID));
+			byte winner = 0;
+			short score = 0;
+			for(byte i=0;i<_score.length;i++){
+				if(_score[i]>score){
+					score = _score[i];
+					winner = i;
+				}
+			}
+			sendToClients(new EndGameEvent("Player "+winner));
 		}
 	}
 
