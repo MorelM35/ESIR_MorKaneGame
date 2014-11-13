@@ -20,12 +20,12 @@ import edu.game.client.event.ScoreEvent;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteEventServiceServlet implements GreetingService {
 	// Variables
-	private final short _nbMaxPlayers = 4;
-	private final int _gridx = 20;
-	private final int _gridy = 20;
-	private final int _nbInitCookies = 20;
-	private final int _nbInitMines = 30;
-	private final short _penaltyPoint = 5;
+	public static final short _nbMaxPlayers = 4;
+	public static final int _gridx = 20;
+	public static final int _gridy = 25;
+	public static final int _nbInitCookies = 20;
+	public static final int _nbInitMines = 30;
+	public static final short _penaltyPoint = 5;
 
 	private int _nbCookies;
 	private HashMap<Byte,int[]> _mapPlayers;
@@ -93,7 +93,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	private void removePlayer(byte myID) throws Exception {
 		int[] coord= _mapPlayers.get(myID);
 		if(coord!=null){
-			System.out.println("try to remove ("+coord[0]+":"+coord[1]+")="+_grid[coord[0]][coord[1]]);
+			//System.out.println("try to remove ("+coord[0]+":"+coord[1]+")="+_grid[coord[0]][coord[1]]);
 			_grid[coord[0]][coord[1]]=0;
 			_score[myID-1]=0;
 			if(_mapPlayers.remove(myID)==null)System.err.println("Player not found");
@@ -146,7 +146,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		return _nbCookies;
 	}
 
-	private boolean isInOfRange(int [] coord){
+	public boolean isInOfRange(int [] coord){
 		return !(coord[0]<0 || coord[0]>_gridx-1 || coord[1]>_gridy-1 || coord[1]<0);
 	}
 
