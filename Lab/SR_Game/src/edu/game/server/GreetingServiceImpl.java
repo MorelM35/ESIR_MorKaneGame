@@ -21,10 +21,10 @@ import edu.game.client.event.ScoreEvent;
 public class GreetingServiceImpl extends RemoteEventServiceServlet implements GreetingService {
 	// Variables
 	public static final short _nbMaxPlayers = 4;
-	public static final int _gridx = 20;
-	public static final int _gridy = 25;
-	public static final int _nbInitCookies = 20;
-	public static final int _nbInitMines = 30;
+	public static final int _gridx = 50;
+	public static final int _gridy = 20;
+	public static final int _nbInitCookies = 100;
+	public static final int _nbInitMines = 50;
 	public static final short _penaltyPoint = 5;
 
 	private int _nbCookies;
@@ -182,6 +182,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		byte winner = 0;
 		short score = 0;
 		// Search winner
+		//TODO : Check Score when there is one player and he has a negatif score
 		for(byte i=0;i<_score.length;i++){
 			if(_score[i]>score){
 				score = _score[i];

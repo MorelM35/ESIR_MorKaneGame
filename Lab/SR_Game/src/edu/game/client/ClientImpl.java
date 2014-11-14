@@ -26,7 +26,7 @@ public class ClientImpl implements ClientInt{
 	private final GreetingServiceAsync _service;
 
 	private ClientGUI 	_vue;
-	private byte 		_myID =0;
+	private byte 		_myID;
 
 	public ClientImpl(String url) {
 		System.out.println("url : "+url);
@@ -48,29 +48,32 @@ public class ClientImpl implements ClientInt{
 				}else if (anEvent instanceof GameOverEvent){ // If event on End Game
 					_vue.showEndGame(((GameOverEvent)anEvent).getMessage());
 					_myID=-1;
-					_vue.setNameOfPlayer("Spectator");
+					_vue.setNameOfPlayer((byte)-1);
 					getGrid();
 				}else{
 					System.err.println("Erreur RemoteEventService::Apply");
 				}
 			}
 		});
-		
+
 		// Add Listener on Closing window
 		Window.addWindowClosingHandler(new Window.ClosingHandler() {
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
 				try {_service.disconnectMe(_myID, new DefaultCallBack());} catch (Exception e) {e.printStackTrace();}
 			}
-        });
-		
+		});
+
+		_myID=-1;
 		play();
 	}
-	
+
 	public void play(){
-		_service.registerMe(new getID_CallBack());
-		getGrid();
-		getScore();
+		if(_myID<0){
+			_service.registerMe(new getID_CallBack());
+			getGrid();
+			getScore();
+		}
 	}
 
 	@Override
@@ -121,7 +124,7 @@ public class ClientImpl implements ClientInt{
 	public void getScore() {
 		_service.getScore(new DefaultCallBack());		
 	}
-	
+
 
 	// ##############################################################
 	// ######################	CallBack	#########################
@@ -138,7 +141,7 @@ public class ClientImpl implements ClientInt{
 		public void onSuccess(Object result) {
 			if(result instanceof Byte){
 				_myID= (Byte) result;
-				_vue.setNameOfPlayer(""+_myID);
+				_vue.setNameOfPlayer(_myID);
 				_trace("myID = "+_myID);
 			}
 		}

@@ -12,24 +12,24 @@ import edu.game.server.GreetingServiceImpl;
 public class ServerSideTest {
 
 	GreetingServiceImpl _server;
-	
+
 	/**
 	 * MAKE TEST ON SCORES
 	 */
-	
-	
+
+
 	@Before 
 	public void init(){
 		_server=new GreetingServiceImpl();
 	}
-	
+
 	@Test
 	public void initCookie() {
 		int nbCookies = 30;
 		int res = _server.initGrid(nbCookies);
 		assertEquals(nbCookies, res);
 	}
-	
+
 	@Test
 	public void isInRange(){
 		int[] coord = new int[2];
@@ -52,7 +52,7 @@ public class ServerSideTest {
 		coord[1]=-1;
 		assertEquals(false,_server.isInOfRange(coord));
 	}
-	
+
 	@Test
 	public void isPossibleToMove(){
 		isInRange();
@@ -74,7 +74,7 @@ public class ServerSideTest {
 		coord[1]=12;
 		assertEquals(true,_server.isPossibleToMove(coord));
 	}
-	
+
 	@Test 
 	public void newPlayer(){
 		byte id = _server.registerMe();
@@ -88,7 +88,7 @@ public class ServerSideTest {
 		id = _server.registerMe();
 		assertEquals(-1,id);
 	}
-	
+
 	@Test
 	public void removePlayer(){
 		try {
@@ -108,7 +108,7 @@ public class ServerSideTest {
 		}
 		fail("remove sucess with no player in game");
 	}
-	
+
 	@Test
 	public void test_getGrid(){
 		byte[][] grid = _server.getGrid();
@@ -122,24 +122,28 @@ public class ServerSideTest {
 		assertEquals("Init Register player 3 failed",13,grid[GreetingServiceImpl._gridx-1][0]);
 		assertEquals("Init Register player 2 failed",12,grid[GreetingServiceImpl._gridx-1][GreetingServiceImpl._gridy-1]);
 	}
-	
+
 	@Test
 	public void test_InitCookiesAndMines(){
 		byte[][] grid = _server.getGrid();
-		int nbCookies = 0;
-		int nbMines = 0;
-		for(int i =0;i<GreetingServiceImpl._gridx;i++){
-			for(int j=0;j<GreetingServiceImpl._gridy;j++){
-				byte pos = grid[i][j];
-				if(pos==1) nbCookies++;
-				if(pos==2) nbMines++;
+
+		for(int k=0;k<100;k++){
+			int nbCookies = 0;
+			int nbMines = 0;
+			_server.init();
+			for(int i =0;i<GreetingServiceImpl._gridx;i++){
+				for(int j=0;j<GreetingServiceImpl._gridy;j++){
+					byte pos = grid[i][j];
+					if(pos==1) nbCookies++;
+					if(pos==2) nbMines++;
+				}
 			}
+			assertEquals("Init Cookies failed",GreetingServiceImpl._nbInitCookies,nbCookies);
+			assertEquals("Init Mines failed",GreetingServiceImpl._nbInitMines,nbMines);
 		}
-		assertEquals("Init Cookies failed",nbCookies,GreetingServiceImpl._nbInitCookies);
-		assertEquals("Init Mines failed",nbMines,GreetingServiceImpl._nbInitMines);
 	}
-	
-	
+
+
 	@After
 	public void after(){
 		_server=null;
