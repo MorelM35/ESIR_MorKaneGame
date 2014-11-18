@@ -1,8 +1,10 @@
 package edu.game.server;
 
 
+import java.util.Iterator;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.google.gwt.dev.shell.BrowserChannel.SessionHandler.ExceptionOrReturnValue;
 
@@ -182,13 +184,19 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		byte winner = 0;
 		short score = 0;
 		// Search winner
-		//TODO : Check Score when there is one player and he has a negatif score
-		for(byte i=0;i<_score.length;i++){
-			if(_score[i]>score){
-				score = _score[i];
-				winner = i;
+		Set<Byte> setPlayer = _mapPlayers.keySet();
+		Iterator<Byte> itPlayer =  setPlayer.iterator();
+		winner = itPlayer.next();
+		score = _score[winner-1];
+		while(itPlayer.hasNext()){
+			byte player = itPlayer.next();
+			player--;
+			if(_score[player]>score){
+				score=_score[player];
+				winner=player;
 			}
 		}
+		
 		// remove the players
 		for(byte player:_mapPlayers.keySet()){
 			try {
