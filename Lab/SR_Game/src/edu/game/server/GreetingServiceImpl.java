@@ -14,6 +14,7 @@ import edu.game.client.GreetingService;
 import edu.game.client.event.GameOverEvent;
 import edu.game.client.event.MoveEvent;
 import edu.game.client.event.ScoreEvent;
+import edu.game.client.event.ChangeStatePlayerEvent;
 
 
 /**
@@ -83,6 +84,8 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		_mapPlayers.put(nID, coord);
 		System.out.println("new Player "+nID+" : ["+coord[0]+"]["+coord[1]+"]");
 		_grid[coord[0]][coord[1]]=(byte) (nID+10);
+		
+		sendToClients(new ChangeStatePlayerEvent(nID,coord));
 
 		return coord;
 	}
@@ -100,6 +103,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 			_score[myID-1]=0;
 			if(_mapPlayers.remove(myID)==null)System.err.println("Player not found");
 			else System.out.println("remove Player "+myID);
+			sendToClients(new ChangeStatePlayerEvent(myID,coord));
 		} else throw new Exception("Wrong ID");
 
 	}

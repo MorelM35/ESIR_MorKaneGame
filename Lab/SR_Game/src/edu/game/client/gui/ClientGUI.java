@@ -25,7 +25,8 @@ public class ClientGUI extends Composite  {
 	private VerticalPanel vPanel = new VerticalPanel();
 
 	private TextArea txtScore;
-	private Context2d 		context;
+	private Context2d 		_context;
+	private Canvas 			_canvas;
 	private ImageElement 	imgCookie;
 	private ImageElement 	imgMine;
 	private ImageElement 	imgPlayer1;
@@ -75,23 +76,23 @@ public class ClientGUI extends Composite  {
 		vPanel.add(labelPlayer);
 
 		// ########## Init Canvas
-		Canvas canvas = Canvas.createIfSupported();
-		if(canvas==null){
+		_canvas = Canvas.createIfSupported();
+		if(_canvas==null){
 			DialogBox dialog = new DialogBox(true);
 			dialog.setTitle("Error");
 			dialog.setText("can't continue");
 			dialog.showRelativeTo(vPanel);
 		}
-		vPanel.add(canvas);
-		canvas.setWidth(width+"pt");
-		canvas.setHeight(height+"pt");
-		canvas.setCoordinateSpaceWidth(width);
-		canvas.setCoordinateSpaceHeight(height);
-		context = canvas.getContext2d();
+		vPanel.add(_canvas);
+		_canvas.setWidth(width+"pt");
+		_canvas.setHeight(height+"pt");
+		_canvas.setCoordinateSpaceWidth(width);
+		_canvas.setCoordinateSpaceHeight(height);
+		_context = _canvas.getContext2d();
 
 
 		// Init Key Handler
-		canvas.addKeyDownHandler(new KeyDownHandler() {
+		_canvas.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				switch(event.getNativeKeyCode()){
@@ -169,7 +170,7 @@ public class ClientGUI extends Composite  {
 	 * @param newGrid : 
 	 */
 	public void updateGrid(byte[][] newGrid){
-		context.clearRect(0, 0, width, height);
+		_context.clearRect(0, 0, width, height);
 		int dim = newGrid.length;
 		for(int i=0;i<dim;i++){
 			for(int j=0; j<dim;j++){
@@ -188,11 +189,12 @@ public class ClientGUI extends Composite  {
 				}				
 			}
 		}	
-		context.stroke();
+		_context.stroke();
 	}
 
 
 	public void updateScore(short[] result) {
+		// TODO : Change 
 		String s = "~~~~~  Table Of Score  ~~~~~";
 		s+="\n¤ Player 1 : "+result[0];		
 		s+="\n¤ Player 2 : "+result[1];	
@@ -213,27 +215,34 @@ public class ClientGUI extends Composite  {
 	}
 
 	private void drawCookie(int x, int y){
-		context.drawImage(imgCookie, x*intervalx,y*intervaly,sizeImg,sizeImg);
+		_context.drawImage(imgCookie, x*intervalx,y*intervaly,sizeImg,sizeImg);
 	}
 
 	private void drawMine(int x, int y){
-		context.drawImage(imgMine, x*intervalx, y*intervaly,sizeImg,sizeImg);
+		_context.drawImage(imgMine, x*intervalx, y*intervaly,sizeImg,sizeImg);
 	}
 
 	private void drawPlayer(int nID, int x, int y){
 		switch(nID){
 		case 1:
-			context.drawImage(imgPlayer1, x*intervalx, y*intervaly,sizeImg,sizeImg);
+			_context.drawImage(imgPlayer1, x*intervalx, y*intervaly,sizeImg,sizeImg);
 			break;
 		case 2:
-			context.drawImage(imgPlayer2, x*intervalx, y*intervaly,sizeImg,sizeImg);
+			_context.drawImage(imgPlayer2, x*intervalx, y*intervaly,sizeImg,sizeImg);
 			break;
 		case 3:
-			context.drawImage(imgPlayer3, x*intervalx, y*intervaly,sizeImg,sizeImg);
+			_context.drawImage(imgPlayer3, x*intervalx, y*intervaly,sizeImg,sizeImg);
 			break;
 		case 4:
-			context.drawImage(imgPlayer4, x*intervalx, y*intervaly,sizeImg,sizeImg);
+			_context.drawImage(imgPlayer4, x*intervalx, y*intervaly,sizeImg,sizeImg);
 			break;
 		}
+	}
+
+	public void changeStatePlayer(byte nID, int[] coord) {
+			drawPlayer(nID, coord[0],coord[1]);	
+			// TODO : Animation new player
+			//_canvas.setStyleName("changeState");
+			
 	}
 }
