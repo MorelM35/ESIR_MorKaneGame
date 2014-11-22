@@ -70,7 +70,7 @@ public class ClientGUI extends Composite  {
 		imgCurrentPlayer = new Image(urlSpectator);
 		imgCurrentPlayer.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
 		
-		labelPlayer= new Label("Welcome ! Press 'A' to play !");
+		labelPlayer= new Label("Loading...");
 
 		vPanel.add(imgCurrentPlayer);
 		vPanel.add(labelPlayer);
@@ -92,7 +92,6 @@ public class ClientGUI extends Composite  {
 
 
 		// Init Key Handler
-		_canvas.setFocus(true);
 		_canvas.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -135,7 +134,6 @@ public class ClientGUI extends Composite  {
 		txt.setText("Loading...");
 		vPanel.add(txt); 
 		 */
-		
 	}
 
 	/**
@@ -192,17 +190,16 @@ public class ClientGUI extends Composite  {
 			}
 		}	
 		_context.stroke();
-		_canvas.setFocus(true);
 	}
 
 
 	public void updateScore(short[] result) {
 		// TODO : Change 
 		String s = "~~~~~  Table Of Score  ~~~~~";
-		if(result[0]!=-1) s+="\n¤ Player 1 : "+result[0];		
-		if(result[1]!=-1) s+="\n¤ Player 2 : "+result[1];	
-		if(result[2]!=-1) s+="\n¤ Player 3 : "+result[2];	
-		if(result[3]!=-1) s+="\n¤ Player 4 : "+result[3];	
+		s+="\n¤ Player 1 : "+result[0];		
+		s+="\n¤ Player 2 : "+result[1];	
+		s+="\n¤ Player 3 : "+result[2];	
+		s+="\n¤ Player 4 : "+result[3];	
 
 		//System.out.println(s);
 		txtScore.setText(s);
@@ -242,23 +239,10 @@ public class ClientGUI extends Composite  {
 		}
 	}
 
-	/**
-	 * is called when a new player come in game or leave the game
-	 * @param nID	: Player ID
-	 * @param coord	: Player coord
-	 */
 	public void changeStatePlayer(byte nID, int[] coord) {
 			drawPlayer(nID, coord[0],coord[1]);	
 			// TODO : Animation new player
 			//_canvas.setStyleName("changeState");
-			
-	}
-
-	/**
-	 * Show an Error on the Player Screen
-	 * @param message
-	 */
-	public void showError(String message) {
 			
 	}
 }
