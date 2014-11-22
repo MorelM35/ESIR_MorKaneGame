@@ -196,10 +196,10 @@ public class ClientGUI extends Composite  {
 	public void updateScore(short[] result) {
 		// TODO : Change 
 		String s = "~~~~~  Table Of Score  ~~~~~";
-		s+="\n¤ Player 1 : "+result[0];		
-		s+="\n¤ Player 2 : "+result[1];	
-		s+="\n¤ Player 3 : "+result[2];	
-		s+="\n¤ Player 4 : "+result[3];	
+		if(result[0]!=-1) s+="\n¤ Player 1 : "+result[0];		
+		if(result[0]!=-1) s+="\n¤ Player 2 : "+result[1];	
+		if(result[0]!=-1) s+="\n¤ Player 3 : "+result[2];	
+		if(result[0]!=-1) s+="\n¤ Player 4 : "+result[3];	
 
 		//System.out.println(s);
 		txtScore.setText(s);
