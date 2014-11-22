@@ -46,6 +46,16 @@ h2 {
   margin: 15px 6px 6px;
 }
 
+.changeState{
+	-webkit-animation: changeColor 5s;
+	animation: changeColor 5s;
+}
+
+@-webkit-keyframes changeColor{
+	from{background : #99F7F7;}
+	to{background :#eee; }
+}
+
 canvas {
 	border: 3px dashed #aaa;
 	background: #eee;
