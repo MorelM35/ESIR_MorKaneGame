@@ -158,7 +158,7 @@ public class ClientImpl implements ClientInt{
 		@Override
 		public void onFailure(Throwable caught) {
 			System.err.println("ERROR : "+caught.getMessage());
-			_vue.showError(caught.getMessage());
+			//_vue.showError(caught.getMessage());
 		}
 
 		@Override
