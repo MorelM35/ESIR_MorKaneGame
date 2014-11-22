@@ -22,6 +22,10 @@ import edu.game.server.GreetingServiceImpl;
 public class ClientGUI extends Composite  {
 	private ClientImpl _controle;
 	private Label labelPlayer;
+	private Label labelScore_p1;
+	private Label labelScore_p2;
+	private Label labelScore_p3;
+	private Label labelScore_p4;
 	private VerticalPanel vPanel = new VerticalPanel();
 
 	private TextArea txtScore;
@@ -33,6 +37,10 @@ public class ClientGUI extends Composite  {
 	private ImageElement 	imgPlayer3;
 	private ImageElement 	imgPlayer4;
 	private Image			imgCurrentPlayer;
+	private Image			imgScore_p1;
+	private Image			imgScore_p2;
+	private Image			imgScore_p3;
+	private Image			imgScore_p4;
 	private static final int width = 700;
 	private static final int height= 300;
 	private static final int sizeImg = 15;
@@ -68,8 +76,20 @@ public class ClientGUI extends Composite  {
 		imgPlayer4	= ImageElement.as(new Image(urlP4).getElement());
 		imgCurrentPlayer = new Image(urlSpectator);
 		imgCurrentPlayer.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p1 = new Image(urlP1);
+		imgScore_p1.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p2 = new Image(urlP2);
+		imgScore_p2.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p3 = new Image(urlP3);
+		imgScore_p3.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p4 = new Image(urlP4);
+		imgScore_p4.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
 		
 		labelPlayer= new Label("Loading...");
+		labelScore_p1 = new Label("Player 1");
+		labelScore_p2 = new Label("Player 2");
+		labelScore_p3 = new Label("Player 3");
+		labelScore_p4 = new Label("Player 4");
 
 		vPanel.add(imgCurrentPlayer);
 		vPanel.add(labelPlayer);
@@ -114,12 +134,14 @@ public class ClientGUI extends Composite  {
 			}
 		});
 
+		/*		
 		// Init table of score
 		txtScore = new TextArea();
 		txtScore.setPixelSize(300,100);
 		txtScore.setReadOnly(true);
 		txtScore.setText("Loading Score...");
 		vPanel.add(txtScore);
+		*/	
 
 		/**
 		 * Version 1 : Show in TextArea
@@ -193,23 +215,38 @@ public class ClientGUI extends Composite  {
 
 
 	public void updateScore(short[] result) {
-		String s = "~~~~~  Table Of Score  ~~~~~";
-		s+="\n¤ Player 1 : "+result[0];		
-		s+="\n¤ Player 2 : "+result[1];	
-		s+="\n¤ Player 3 : "+result[2];	
-		s+="\n¤ Player 4 : "+result[3];	
-
-		//System.out.println(s);
-		txtScore.setText(s);
+		String s1 = "";
+		String s2 = "";
+		String s3 = "";
+		String s4 = "";
+		
+		vPanel.add(imgScore_p1);
+		s1+="\n Player 1 : "+result[0];
+		labelScore_p1.setText(s1);
+		vPanel.add(labelScore_p1);
+		
+		vPanel.add(imgScore_p2);
+		s2+="\n Player 2 : "+result[1];
+		labelScore_p2.setText(s2);
+		vPanel.add(labelScore_p2);
+		
+		vPanel.add(imgScore_p3);
+		s3+="\n Player 3 : "+result[2];
+		labelScore_p3.setText(s3);
+		vPanel.add(labelScore_p3);
+		
+		vPanel.add(imgScore_p4);
+		s4+="\n Player 4 : "+result[3];
+		labelScore_p4.setText(s4);
+		vPanel.add(labelScore_p4);
 	}
 
 	public void showEndGame(String winnerPlayer){		
-		// TODO : if player want re-play
+		// TODO : if player want re-play pop up
 		DialogBox dialog = new DialogBox(true);
 		dialog.setTitle("!!! Game Over !!!!");
 		dialog.setText("The winner of this game is "+winnerPlayer+"\n Congratulation!\n");
 		dialog.showRelativeTo(vPanel);
-
 	}
 
 	private void drawCookie(int x, int y){
