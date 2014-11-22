@@ -51,7 +51,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	public void init(){
 		initGrid(_nbInitCookies);
 		for(int i=0;i<_nbMaxPlayers;i++){
-			_score[i]=0;
+			_score[i]=-1;
 		}
 	}
 
@@ -84,6 +84,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		_mapPlayers.put(nID, coord);
 		System.out.println("new Player "+nID+" : ["+coord[0]+"]["+coord[1]+"]");
 		_grid[coord[0]][coord[1]]=(byte) (nID+10);
+		_score[nID-1]=0;
 		
 		sendToClients(new ChangeStatePlayerEvent(nID,coord));
 
@@ -100,10 +101,14 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		if(coord!=null){
 			//System.out.println("try to remove ("+coord[0]+":"+coord[1]+")="+_grid[coord[0]][coord[1]]);
 			_grid[coord[0]][coord[1]]=0;
-			_score[myID-1]=0;
+			_score[myID-1]=-1;
 			if(_mapPlayers.remove(myID)==null)System.err.println("Player not found");
 			else System.out.println("remove Player "+myID);
 			sendToClients(new ChangeStatePlayerEvent(myID,coord));
+			// If there are not player anymore
+			if(_mapPlayers.isEmpty()){
+				init();
+			}
 		} else throw new Exception("Wrong ID");
 
 	}
