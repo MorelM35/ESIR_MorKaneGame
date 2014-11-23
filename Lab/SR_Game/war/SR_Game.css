@@ -8,6 +8,8 @@ h1 {
   color: #E9B300;
   margin: 20px 0px 5px;
   text-align: center;
+  transform-origin: 50% 100%;
+  transform: perspective(300px) rotateX(25deg);
 }
 
 h2 {
@@ -51,6 +53,12 @@ h2 {
 	animation: changeColor 5s;
 }
 
+.scoreStyle{
+  font-size: 2em;
+  font-weight: bold;
+  color: #947B00;
+}
+
 @-webkit-keyframes changeColor{
 	from{background : #99F7F7;}
 	to{background :#eee; }
@@ -60,6 +68,9 @@ canvas {
 	border: 3px dashed #aaa;
 	background: #eee;
 	text-align: center;
+	
+	transform-origin: 50% 100%;
+    transform: perspective(300px) rotateX(5deg);
 }
 
 body {

@@ -200,8 +200,8 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		while(itPlayer.hasNext()){
 			byte player = itPlayer.next();
 			player--;
-			if(_score[player]>score){
-				score=_score[player];
+			if(_score[player-1]>score){
+				score=_score[player-1];
 				winner=player;
 			}
 		}
@@ -216,7 +216,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		init();
 		
 		// to Inform Player
-		sendToClients(new GameOverEvent("Player "+(winner+1)));
+		sendToClients(new GameOverEvent("Player "+(winner)));
 	}
 
 	/**

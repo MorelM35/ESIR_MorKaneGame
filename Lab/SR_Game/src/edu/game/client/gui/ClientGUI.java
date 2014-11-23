@@ -7,8 +7,10 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -22,9 +24,14 @@ import edu.game.server.GreetingServiceImpl;
 public class ClientGUI extends Composite  {
 	private ClientImpl _controle;
 	private Label labelPlayer;
+	private Label labelScore_p1;
+	private Label labelScore_p2;
+	private Label labelScore_p3;
+	private Label labelScore_p4;
 	private VerticalPanel vPanel = new VerticalPanel();
+	private HorizontalPanel hScore;
 
-	private TextArea txtScore;
+	//private TextArea txtScore;
 	private Context2d 		_context;
 	private Canvas 			_canvas;
 	private ImageElement 	imgCookie;
@@ -34,6 +41,11 @@ public class ClientGUI extends Composite  {
 	private ImageElement 	imgPlayer3;
 	private ImageElement 	imgPlayer4;
 	private Image			imgCurrentPlayer;
+	private Image			imgScore_p1;
+	private Image			imgScore_p2;
+	private Image			imgScore_p3;
+	private Image			imgScore_p4;
+
 	private static final int width = 700;
 	private static final int height= 300;
 	private static final int sizeImg = 15;
@@ -45,7 +57,6 @@ public class ClientGUI extends Composite  {
 	private static final String urlP3 ="http://icons.iconarchive.com/icons/spoon-graphics/monster/32/Orange-Monster-icon.png";
 	private static final String urlP4 ="http://icons.iconarchive.com/icons/spoon-graphics/monster/32/Purple-Monster-icon.png";
 	private static final String urlSpectator = "http://ec.l.thumbs.canstockphoto.com/canstock3826647.jpg";
-	private static final String urlStartingPlot = "http://jolstatic.fr/wiki/images/ffxiv/thumb/5/54/Icone_Parquet_des_temp%C3%AAtes.png/65px-Icone_Parquet_des_temp%C3%AAtes.png";
 
 	// Init
 	int intervalx = width/GreetingServiceImpl._gridx;
@@ -69,8 +80,25 @@ public class ClientGUI extends Composite  {
 		imgPlayer4	= ImageElement.as(new Image(urlP4).getElement());
 		imgCurrentPlayer = new Image(urlSpectator);
 		imgCurrentPlayer.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p1 = new Image(urlP1);
+		imgScore_p1.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p2 = new Image(urlP2);
+		imgScore_p2.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p3 = new Image(urlP3);
+		imgScore_p3.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		imgScore_p4 = new Image(urlP4);
+		imgScore_p4.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
+		labelPlayer= new Label("Press 'Enter' to play");
 		
-		labelPlayer= new Label("Loading...");
+		// Init Score
+		labelScore_p1 = new Label("Player 1");
+		labelScore_p1.setStyleName("scoreStyle");
+		labelScore_p2 = new Label("Player 2");
+		labelScore_p2.setStyleName("scoreStyle");
+		labelScore_p3 = new Label("Player 3");
+		labelScore_p3.setStyleName("scoreStyle");
+		labelScore_p4 = new Label("Player 4");
+		labelScore_p4.setStyleName("scoreStyle");
 
 		vPanel.add(imgCurrentPlayer);
 		vPanel.add(labelPlayer);
@@ -108,32 +136,17 @@ public class ClientGUI extends Composite  {
 				case KeyCodes.KEY_RIGHT:
 					_controle.moveRight();
 					break;
-				case KeyCodes.KEY_A:
+				case KeyCodes.KEY_ENTER:
 					_controle.play();
 					break;
 				}
 			}
 		});
-
-		// Init table of score
-		txtScore = new TextArea();
-		txtScore.setPixelSize(300,100);
-		txtScore.setReadOnly(true);
-		txtScore.setText("Loading Score...");
-		vPanel.add(txtScore);
-
-		/**
-		 * Version 1 : Show in TextArea
-		 */
-		/*
-		// Init window TextArea
-		txt= new TextArea();
-		txt.setPixelSize(1000,380);
-		txt.setAlignment(TextAlignment.CENTER);
-		txt.setReadOnly(true);
-		txt.setText("Loading...");
-		vPanel.add(txt); 
-		 */
+		
+		hScore = new HorizontalPanel();
+		hScore.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		hScore.setHorizontalAlignment(HorizontalPanel.ALIGN_JUSTIFY);
+		vPanel.add(hScore);
 	}
 
 	/**
@@ -144,7 +157,7 @@ public class ClientGUI extends Composite  {
 		switch(nID){
 		case -1:
 			imgCurrentPlayer.setUrl(urlSpectator);
-			labelPlayer.setText("The room is full !! You are a spectator (if you want try to play, press 'A')");
+			labelPlayer.setText("The room is full !! You are a spectator (if you want try to play, press 'Enter')");
 			break;
 		case 1:
 			imgCurrentPlayer.setUrl(urlP1);
@@ -194,24 +207,51 @@ public class ClientGUI extends Composite  {
 
 
 	public void updateScore(short[] result) {
-		// TODO : Change 
-		String s = "~~~~~  Table Of Score  ~~~~~";
-		if(result[0]!=-1) s+="\n¤ Player 1 : "+result[0];		
-		if(result[0]!=-1) s+="\n¤ Player 2 : "+result[1];	
-		if(result[0]!=-1) s+="\n¤ Player 3 : "+result[2];	
-		if(result[0]!=-1) s+="\n¤ Player 4 : "+result[3];	
+		// Init Score
+		String s;
 
-		//System.out.println(s);
-		txtScore.setText(s);
+		if(result[0]!=-1){
+			hScore.add(imgScore_p1);
+			s="1 : "+result[0];
+			labelScore_p1.setText(s);
+			hScore.add(labelScore_p1);
+		}
+
+		if(result[1]!=-1){
+			hScore.add(imgScore_p2);
+			s="2 : "+result[1];
+			labelScore_p2.setText(s);
+			hScore.add(labelScore_p2);
+		}
+
+		if(result[2]!=-1){
+			hScore.add(imgScore_p3);
+			s="3 : "+result[2];
+			labelScore_p3.setText(s);
+			hScore.add(labelScore_p3);
+		}
+
+		if(result[3]!=-1){
+			hScore.add(imgScore_p4);
+			s="4 : "+result[3];
+			labelScore_p4.setText(s);
+			hScore.add(labelScore_p4);
+		}
 	}
 
 	public void showEndGame(String winnerPlayer){		
-		// TODO : if player want re-play
+		// TODO : if player want re-play pop up
 		DialogBox dialog = new DialogBox(true);
-		dialog.setTitle("!!! Game Over !!!!");
-		dialog.setText("The winner of this game is "+winnerPlayer+"\n Congratulation!\n");
-		dialog.showRelativeTo(vPanel);
-
+		dialog.setTitle("!!! The Game Is Over !!!!");
+		dialog.setGlassEnabled(true);
+		dialog.center();
+		if(labelPlayer.getText().equals(winnerPlayer)) {
+			dialog.setText("Congratulation, you are the winner! Click to close");	
+		} else {
+			dialog.setText("Game Over! The winner is "+winnerPlayer+"...");
+		}
+		dialog.show();
+		//dialog.showRelativeTo(vPanel);
 	}
 
 	private void drawCookie(int x, int y){
@@ -240,9 +280,10 @@ public class ClientGUI extends Composite  {
 	}
 
 	public void changeStatePlayer(byte nID, int[] coord) {
-			drawPlayer(nID, coord[0],coord[1]);	
-			// TODO : Animation new player
-			//_canvas.setStyleName("changeState");
-			
+		drawPlayer(nID, coord[0],coord[1]);	
+		_controle.getScore();
+		// TODO : Animation new player
+		//_canvas.setStyleName("changeState");
+
 	}
 }
