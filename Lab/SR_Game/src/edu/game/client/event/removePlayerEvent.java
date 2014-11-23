@@ -2,11 +2,11 @@ package edu.game.client.event;
 
 import de.novanic.eventservice.client.event.Event;
 
-public class ChangeStatePlayerEvent implements Event {
+public class removePlayerEvent implements Event {
 	protected int[] _coord = null;
 	private byte _id = -1;
 	 
-	public ChangeStatePlayerEvent(){}
+	public removePlayerEvent(){}
 	
     public int[] getCoord() {
         return _coord;
@@ -20,7 +20,7 @@ public class ChangeStatePlayerEvent implements Event {
         this._coord = coord;
     }
  
-    public ChangeStatePlayerEvent(byte id , int[] coord){
+    public removePlayerEvent(byte id , int[] coord){
         super();
         this._id=id;
         this._coord = coord;

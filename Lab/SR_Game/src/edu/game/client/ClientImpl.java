@@ -13,7 +13,8 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 import edu.game.client.event.GameOverEvent;
 import edu.game.client.event.MoveEvent;
 import edu.game.client.event.ScoreEvent;
-import edu.game.client.event.ChangeStatePlayerEvent;
+import edu.game.client.event.newPlayerEvent;
+import edu.game.client.event.removePlayerEvent;
 import edu.game.client.gui.ClientGUI;
 
 
@@ -51,8 +52,10 @@ public class ClientImpl implements ClientInt{
 					_myID=-1;
 					_vue.setNameOfPlayer((byte)-1);
 					getGrid();
-				}else if (anEvent instanceof ChangeStatePlayerEvent){
-					_vue.changeStatePlayer(((ChangeStatePlayerEvent) anEvent).getID(),((ChangeStatePlayerEvent) anEvent).getCoord());
+				}else if (anEvent instanceof newPlayerEvent){
+					_vue.addNewPlayer(((newPlayerEvent) anEvent).getID(),((newPlayerEvent) anEvent).getCoord());
+				}else if (anEvent instanceof removePlayerEvent){
+					_vue.removeAplayer(((removePlayerEvent) anEvent).getID(),((removePlayerEvent) anEvent).getCoord());
 				}else{
 					System.err.println("Erreur RemoteEventService::Apply");
 				}
@@ -72,6 +75,9 @@ public class ClientImpl implements ClientInt{
 		getScore();
 	}
 
+	/**
+	 * Register with the server
+	 */
 	public void play(){
 		if(_myID<0){
 			_service.registerMe(new getID_CallBack());

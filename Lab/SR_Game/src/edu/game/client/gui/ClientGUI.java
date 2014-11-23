@@ -7,14 +7,11 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.game.client.ClientImpl;
@@ -215,6 +212,9 @@ public class ClientGUI extends Composite  {
 			s="1 : "+result[0];
 			labelScore_p1.setText(s);
 			hScore.add(labelScore_p1);
+		} else {
+			hScore.remove(labelScore_p1);
+			hScore.remove(imgScore_p1);
 		}
 
 		if(result[1]!=-1){
@@ -222,6 +222,9 @@ public class ClientGUI extends Composite  {
 			s="2 : "+result[1];
 			labelScore_p2.setText(s);
 			hScore.add(labelScore_p2);
+		}else {
+			hScore.remove(labelScore_p2);
+			hScore.remove(imgScore_p2);
 		}
 
 		if(result[2]!=-1){
@@ -229,6 +232,9 @@ public class ClientGUI extends Composite  {
 			s="3 : "+result[2];
 			labelScore_p3.setText(s);
 			hScore.add(labelScore_p3);
+		}else {
+			hScore.remove(labelScore_p3);
+			hScore.remove(imgScore_p3);
 		}
 
 		if(result[3]!=-1){
@@ -236,6 +242,9 @@ public class ClientGUI extends Composite  {
 			s="4 : "+result[3];
 			labelScore_p4.setText(s);
 			hScore.add(labelScore_p4);
+		}else {
+			hScore.remove(labelScore_p4);
+			hScore.remove(imgScore_p4);
 		}
 	}
 
@@ -279,11 +288,17 @@ public class ClientGUI extends Composite  {
 		}
 	}
 
-	public void changeStatePlayer(byte nID, int[] coord) {
+	public void addNewPlayer(byte nID, int[] coord) {
 		drawPlayer(nID, coord[0],coord[1]);	
 		_controle.getScore();
 		// TODO : Animation new player
 		//_canvas.setStyleName("changeState");
 
+	}
+
+	public void removeAplayer(byte id, int[] coord) {
+		_controle.getGrid();
+		// TODO Auto-generated method stub
+		
 	}
 }

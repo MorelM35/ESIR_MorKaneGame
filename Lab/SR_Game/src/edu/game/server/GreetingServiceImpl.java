@@ -14,7 +14,8 @@ import edu.game.client.GreetingService;
 import edu.game.client.event.GameOverEvent;
 import edu.game.client.event.MoveEvent;
 import edu.game.client.event.ScoreEvent;
-import edu.game.client.event.ChangeStatePlayerEvent;
+import edu.game.client.event.newPlayerEvent;
+import edu.game.client.event.removePlayerEvent;
 
 
 /**
@@ -86,7 +87,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		_grid[coord[0]][coord[1]]=(byte) (nID+10);
 		_score[nID-1]=0;
 		
-		sendToClients(new ChangeStatePlayerEvent(nID,coord));
+		sendToClients(new newPlayerEvent(nID,coord));
 
 		return coord;
 	}
@@ -104,7 +105,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 			_score[myID-1]=-1;
 			if(_mapPlayers.remove(myID)==null)System.err.println("Player not found");
 			else System.out.println("remove Player "+myID);
-			sendToClients(new ChangeStatePlayerEvent(myID,coord));
+			sendToClients(new removePlayerEvent(myID,coord));
 			// If there are not player anymore
 			if(_mapPlayers.isEmpty()){
 				init();
@@ -157,10 +158,20 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		return _nbCookies;
 	}
 
+	/**
+	 * Check is the coordinate is in of the grid
+	 * @param coord : coordinate
+	 * @return		: boolean if in or not
+	 */
 	public boolean isInOfRange(int [] coord){
 		return !(coord[0]<0 || coord[0]>_gridx-1 || coord[1]>_gridy-1 || coord[1]<0);
 	}
 
+	/**
+	 * Check is the case is free for a movement 
+	 * @param coord
+	 * @return
+	 */
 	public boolean isPossibleToMove(int[] coord){
 		if(isInOfRange(coord)){
 			//System.out.println("try to move ("+coord[0]+":"+coord[1]+")");
@@ -189,6 +200,9 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		sendToClients(new ScoreEvent(_score));
 	}
 
+	/**
+	 * Send the winner of this game, disconnect all players and initialise a new grid
+	 */
 	private void gameOver(){
 		byte winner = 0;
 		short score = 0;
@@ -249,6 +263,10 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		return false;
 	}
 
+	/**
+	 * Send a broadcaste message to all connected clients 
+	 * @param event
+	 */
 	private void sendToClients(Event event){
 		addEvent(GreetingService.SERVER_MESSAGE_DOMAIN, event);
 	}

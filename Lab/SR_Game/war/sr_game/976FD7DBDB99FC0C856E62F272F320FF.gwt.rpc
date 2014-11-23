@@ -19,10 +19,11 @@ de.novanic.eventservice.client.event.filter.DefaultEventFilter, true, true, true
 de.novanic.eventservice.client.event.listener.unlisten.DefaultUnlistenEvent, true, true, true, true, de.novanic.eventservice.client.event.listener.unlisten.DefaultUnlistenEvent/2862324233, 2862324233
 de.novanic.eventservice.client.event.listener.unlisten.UnlistenEventListener$Scope, false, false, true, true, de.novanic.eventservice.client.event.listener.unlisten.UnlistenEventListener$Scope/3386589582, 3386589582
 de.novanic.eventservice.client.event.service.EventService, false, false, false, false, _, 583832144
-edu.game.client.event.ChangeStatePlayerEvent, true, true, true, true, edu.game.client.event.ChangeStatePlayerEvent/2538924598, 2538924598
 edu.game.client.event.GameOverEvent, true, true, true, true, edu.game.client.event.GameOverEvent/2687813995, 2687813995
 edu.game.client.event.MoveEvent, true, true, true, true, edu.game.client.event.MoveEvent/3976893129, 3976893129
 edu.game.client.event.ScoreEvent, true, true, true, true, edu.game.client.event.ScoreEvent/1950440622, 1950440622
+edu.game.client.event.newPlayerEvent, true, true, true, true, edu.game.client.event.newPlayerEvent/2224684471, 2224684471
+edu.game.client.event.removePlayerEvent, true, true, true, true, edu.game.client.event.removePlayerEvent/1086028529, 1086028529
 [I, true, true, true, true, [I/2970817851, 2970817851
 java.lang.Boolean, true, true, true, true, java.lang.Boolean/476441737, 476441737
 java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
