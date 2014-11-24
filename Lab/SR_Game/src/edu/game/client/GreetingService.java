@@ -11,6 +11,7 @@ import de.novanic.eventservice.client.event.domain.DomainFactory;
  */
 @RemoteServiceRelativePath("MessengerRemoteService")
 public interface GreetingService extends RemoteService {
+	// Give a domain to server
 	public static final Domain SERVER_MESSAGE_DOMAIN = DomainFactory.getDomain("server_message_domain");
 	
 	// Init

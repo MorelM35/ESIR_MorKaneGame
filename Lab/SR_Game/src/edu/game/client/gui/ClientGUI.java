@@ -209,7 +209,7 @@ public class ClientGUI extends Composite  {
 
 		if(result[0]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p1);
-			s="1 : "+result[0];
+			s="1 : ["+result[0]+" Pts]   ";
 			labelScore_p1.setText(s);
 			hScore.add(labelScore_p1);
 		} else {
@@ -219,7 +219,7 @@ public class ClientGUI extends Composite  {
 
 		if(result[1]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p2);
-			s="2 : "+result[1];
+			s="2 : ["+result[1]+" Pts]   ";
 			labelScore_p2.setText(s);
 			hScore.add(labelScore_p2);
 		}else {
@@ -229,7 +229,7 @@ public class ClientGUI extends Composite  {
 
 		if(result[2]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p3);
-			s="3 : "+result[2];
+			s="3 : ["+result[2]+" Pts]   ";
 			labelScore_p3.setText(s);
 			hScore.add(labelScore_p3);
 		}else {
@@ -239,7 +239,7 @@ public class ClientGUI extends Composite  {
 
 		if(result[3]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p4);
-			s="4 : "+result[3];
+			s="4 : ["+result[3]+" Pts]   ";
 			labelScore_p4.setText(s);
 			hScore.add(labelScore_p4);
 		}else {

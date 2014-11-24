@@ -66,13 +66,13 @@ public class ServerSideTest {
 		isInRange();
 		int [] coord = new int [2];
 		coord[0]=10;
-		coord[1]=20;
+		coord[1]=18;
 		assertEquals(true,_server.isPossibleToMove(coord));
 		coord[0]=-1;
 		assertEquals(false,_server.isPossibleToMove(coord));
-		coord[0]=20;
+		coord[0]=65;
 		assertEquals(false,_server.isPossibleToMove(coord));
-		coord[1]=20;
+		coord[1]=3;
 		assertEquals(false,_server.isPossibleToMove(coord));
 		coord[1]=-1;
 		assertEquals(false,_server.isPossibleToMove(coord));
@@ -92,12 +92,21 @@ public class ServerSideTest {
 		assertEquals(1,id);
 		id = _server.registerMe();
 		assertEquals(2,id);
+		// Test on Score Tab
+		short [] score = _server.getScore();
+		assertEquals(0, score[0]);
+		assertEquals(0, score[1]);
+		assertEquals(GreetingServiceImpl._freeID, score[2]);
+		assertEquals(GreetingServiceImpl._freeID, score[3]);
+		
 		id = _server.registerMe();
 		assertEquals(3,id);
 		id = _server.registerMe();
 		assertEquals(4,id);
 		id = _server.registerMe();
 		assertEquals(-1,id);
+		
+		
 	}
 
 	/**
@@ -110,8 +119,16 @@ public class ServerSideTest {
 		} catch (Exception e) {
 			newPlayer();
 			try {
-				_server.disconnectMe((byte)2);
+				_server.disconnectMe((byte)2);				
 				_server.disconnectMe((byte)3);
+				
+				// Test on Score Tab
+				short [] score = _server.getScore();
+				assertEquals(0, score[3]);
+				assertEquals(GreetingServiceImpl._freeID, score[2]);
+				assertEquals(GreetingServiceImpl._freeID, score[1]);
+				assertEquals(0, score[0]);
+				
 				assertEquals(2,_server.registerMe());
 				assertEquals(3,_server.registerMe());
 				assertEquals(-1,_server.registerMe());

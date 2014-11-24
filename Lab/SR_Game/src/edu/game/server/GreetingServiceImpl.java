@@ -213,23 +213,29 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		// Search winner
 		Set<Byte> setPlayer = _mapPlayers.keySet();
 		Iterator<Byte> itPlayer =  setPlayer.iterator();
+		System.out.println("#### Game Over ####");
 		winner = itPlayer.next();
 		score = _score[winner-1];
+		System.out.println("> p"+winner+" ["+score+"]");
 		while(itPlayer.hasNext()){
 			byte player = itPlayer.next();
+			System.out.println("> p"+player+" ["+_score[player-1]+"]");
 			player--;
-			if(_score[player-1]>score){
-				score=_score[player-1];
-				winner=player;
+			if(_score[player]>score){
+				score=_score[player];
+				winner=(byte) (player+1);
 			}
 		}
-		
+		System.out.println("###############");
 		// remove the players
+		_mapPlayers.clear();
+		/*
 		for(byte player:_mapPlayers.keySet()){
 			try {
 				removePlayer(player);
 			} catch (Exception e) {e.printStackTrace();}
 		}
+		*/
 
 		init();
 		
