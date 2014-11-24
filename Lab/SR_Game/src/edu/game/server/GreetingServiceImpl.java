@@ -30,6 +30,10 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	public static final int _nbInitCookies = 100;
 	public static final int _nbInitMines = 50;
 	public static final short _penaltyPoint = 5;
+	/**
+	 * l'ID certain qu'il n'y a pas de joueur
+	 */
+	public static final short _freeID  = (_nbInitMines * _penaltyPoint*-1)-1; // WARNING : check size of 'short'
 
 	private int _nbCookies;
 	private HashMap<Byte,int[]> _mapPlayers;
@@ -52,7 +56,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 	public void init(){
 		initGrid(_nbInitCookies);
 		for(int i=0;i<_nbMaxPlayers;i++){
-			_score[i]=-1;
+			_score[i]=_freeID;
 		}
 	}
 
@@ -102,7 +106,7 @@ public class GreetingServiceImpl extends RemoteEventServiceServlet implements Gr
 		if(coord!=null){
 			//System.out.println("try to remove ("+coord[0]+":"+coord[1]+")="+_grid[coord[0]][coord[1]]);
 			_grid[coord[0]][coord[1]]=0;
-			_score[myID-1]=-1;
+			_score[myID-1]=_freeID;
 			if(_mapPlayers.remove(myID)==null)System.err.println("Player not found");
 			else System.out.println("remove Player "+myID);
 			sendToClients(new removePlayerEvent(myID,coord));

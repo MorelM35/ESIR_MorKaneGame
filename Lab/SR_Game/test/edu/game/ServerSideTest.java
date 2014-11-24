@@ -30,6 +30,10 @@ public class ServerSideTest {
 		assertEquals(nbCookies, res);
 	}
 
+	/**
+	 * Test isInRange Method
+	 * If the next coordinate stay in of range of the grid
+	 */
 	@Test
 	public void isInRange(){
 		int[] coord = new int[2];
@@ -53,6 +57,10 @@ public class ServerSideTest {
 		assertEquals(false,_server.isInOfRange(coord));
 	}
 
+	/**
+	 * Test isPossibleToMove method
+	 * if there aren't 2 players in the same coordinate
+	 */
 	@Test
 	public void isPossibleToMove(){
 		isInRange();
@@ -75,6 +83,9 @@ public class ServerSideTest {
 		assertEquals(true,_server.isPossibleToMove(coord));
 	}
 
+	/**
+	 * Test newPlayer method
+	 */
 	@Test 
 	public void newPlayer(){
 		byte id = _server.registerMe();
@@ -89,6 +100,9 @@ public class ServerSideTest {
 		assertEquals(-1,id);
 	}
 
+	/**
+	 * Test RemovePlayer method
+	 */
 	@Test
 	public void removePlayer(){
 		try {
@@ -109,6 +123,10 @@ public class ServerSideTest {
 		fail("remove sucess with no player in game");
 	}
 
+	/**
+	 * Test add Player in Grid
+	 * If in the 4 corners of grid, All players are sotcked
+	 */
 	@Test
 	public void test_getGrid(){
 		byte[][] grid = _server.getGrid();
@@ -123,6 +141,10 @@ public class ServerSideTest {
 		assertEquals("Init Register player 2 failed",12,grid[GreetingServiceImpl._gridx-1][GreetingServiceImpl._gridy-1]);
 	}
 
+	/**
+	 * Test Init of Cookies and Mines.
+	 * if there are the good number of cookies and mines
+	 */
 	@Test
 	public void test_InitCookiesAndMines(){
 		byte[][] grid = _server.getGrid();

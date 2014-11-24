@@ -207,7 +207,7 @@ public class ClientGUI extends Composite  {
 		// Init Score
 		String s;
 
-		if(result[0]!=-1){
+		if(result[0]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p1);
 			s="1 : "+result[0];
 			labelScore_p1.setText(s);
@@ -217,7 +217,7 @@ public class ClientGUI extends Composite  {
 			hScore.remove(imgScore_p1);
 		}
 
-		if(result[1]!=-1){
+		if(result[1]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p2);
 			s="2 : "+result[1];
 			labelScore_p2.setText(s);
@@ -227,7 +227,7 @@ public class ClientGUI extends Composite  {
 			hScore.remove(imgScore_p2);
 		}
 
-		if(result[2]!=-1){
+		if(result[2]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p3);
 			s="3 : "+result[2];
 			labelScore_p3.setText(s);
@@ -237,7 +237,7 @@ public class ClientGUI extends Composite  {
 			hScore.remove(imgScore_p3);
 		}
 
-		if(result[3]!=-1){
+		if(result[3]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p4);
 			s="4 : "+result[3];
 			labelScore_p4.setText(s);
