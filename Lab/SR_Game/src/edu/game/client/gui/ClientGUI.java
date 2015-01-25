@@ -7,6 +7,7 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -19,12 +20,14 @@ import edu.game.server.GreetingServiceImpl;
 
 
 public class ClientGUI extends Composite  {
+	private byte[][] _grid;
 	private ClientImpl _controle;
 	private Label labelPlayer;
 	private Label labelScore_p1;
 	private Label labelScore_p2;
 	private Label labelScore_p3;
 	private Label labelScore_p4;
+	private Label _problem;
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel hScore;
 
@@ -32,6 +35,7 @@ public class ClientGUI extends Composite  {
 	private Context2d 		_context;
 	private Canvas 			_canvas;
 	private ImageElement 	imgCookie;
+	private ImageElement	imgBonus;
 	private ImageElement 	imgMine;
 	private ImageElement 	imgPlayer1;
 	private ImageElement 	imgPlayer2;
@@ -54,6 +58,7 @@ public class ClientGUI extends Composite  {
 	private static final String urlP3 ="http://icons.iconarchive.com/icons/spoon-graphics/monster/32/Orange-Monster-icon.png";
 	private static final String urlP4 ="http://icons.iconarchive.com/icons/spoon-graphics/monster/32/Purple-Monster-icon.png";
 	private static final String urlSpectator = "http://ec.l.thumbs.canstockphoto.com/canstock3826647.jpg";
+	private static final String urlBonus = "https://cdn0.iconfinder.com/data/icons/sweets/262/cake_muffin_cupcake_pink.png";
 
 	// Init
 	int intervalx = width/GreetingServiceImpl._gridx;
@@ -70,6 +75,7 @@ public class ClientGUI extends Composite  {
 
 		// init Images
 		imgCookie 	= ImageElement.as(new Image(urlCookie).getElement());
+		imgBonus	= ImageElement.as(new Image(urlBonus).getElement());
 		imgMine 	= ImageElement.as(new Image(urlMine).getElement());		
 		imgPlayer1	= ImageElement.as(new Image(urlP1).getElement());	
 		imgPlayer2	= ImageElement.as(new Image(urlP2).getElement());	
@@ -86,7 +92,7 @@ public class ClientGUI extends Composite  {
 		imgScore_p4 = new Image(urlP4);
 		imgScore_p4.setSize(sizeImg+8+"pt", sizeImg+8+"pt");
 		labelPlayer= new Label("Press 'Enter' to play");
-		
+
 		// Init Score
 		labelScore_p1 = new Label("Player 1");
 		labelScore_p1.setStyleName("scoreStyle");
@@ -97,6 +103,9 @@ public class ClientGUI extends Composite  {
 		labelScore_p4 = new Label("Player 4");
 		labelScore_p4.setStyleName("scoreStyle");
 
+		// Init Label Problem
+		_problem = new Label();
+		
 		vPanel.add(imgCurrentPlayer);
 		vPanel.add(labelPlayer);
 
@@ -139,11 +148,12 @@ public class ClientGUI extends Composite  {
 				}
 			}
 		});
-		
+
 		hScore = new HorizontalPanel();
 		hScore.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 		hScore.setHorizontalAlignment(HorizontalPanel.ALIGN_JUSTIFY);
 		vPanel.add(hScore);
+		vPanel.add(_problem);
 	}
 
 	/**
@@ -179,6 +189,27 @@ public class ClientGUI extends Composite  {
 	 * Update the grid of game
 	 * @param newGrid : 
 	 */
+
+	public void updateGrid(int[] oldCoord, int[] newCoord){
+		_context.clearRect(oldCoord[0]*intervalx,oldCoord[1]*intervaly, width, height);
+		switch(_grid[newCoord[1]][newCoord[0]]){
+		case 0:
+			break;
+		case 1:
+			drawCookie(newCoord[1], newCoord[0]);
+			break;
+		case 2:
+			drawMine(newCoord[1], newCoord[0]);
+			break;
+		default:
+			drawPlayer(_grid[newCoord[1]][newCoord[0]]-10, newCoord[1], newCoord[0]);
+		}		
+		_context.stroke();
+	}
+
+
+
+
 	public void updateGrid(byte[][] newGrid){
 		_context.clearRect(0, 0, width, height);
 		int dim = newGrid.length;
@@ -188,11 +219,14 @@ public class ClientGUI extends Composite  {
 				switch(var){
 				case 0:
 					break;
-				case 1:
+				case GreetingServiceImpl.ID_COOKIE:
 					drawCookie(j,i);
 					break;
-				case 2:
+				case GreetingServiceImpl.ID_MINE:
 					drawMine(j, i);
+					break;
+				case GreetingServiceImpl.ID_BONUS:
+					drawBonus(j,i);
 					break;
 				default:
 					drawPlayer(var-10, j, i);
@@ -200,13 +234,13 @@ public class ClientGUI extends Composite  {
 			}
 		}	
 		_context.stroke();
+		_grid = newGrid;
 	}
 
-
 	public void updateScore(short[] result) {
+
 		// Init Score
 		String s;
-
 		if(result[0]!=GreetingServiceImpl._freeID){
 			hScore.add(imgScore_p1);
 			s="1 : ["+result[0]+" Pts]   ";
@@ -270,6 +304,12 @@ public class ClientGUI extends Composite  {
 	private void drawMine(int x, int y){
 		_context.drawImage(imgMine, x*intervalx, y*intervaly,sizeImg,sizeImg);
 	}
+	
+
+	private void drawBonus(int x, int y) {
+		_context.drawImage(imgBonus, x*intervalx, y*intervaly,sizeImg,sizeImg);
+	}
+
 
 	private void drawPlayer(int nID, int x, int y){
 		switch(nID){
@@ -298,7 +338,9 @@ public class ClientGUI extends Composite  {
 
 	public void removeAplayer(byte id, int[] coord) {
 		_controle.getGrid();
-		// TODO Auto-generated method stub
-		
+	}
+	
+	public void showProblem(String msg){
+		_problem.setText(msg);
 	}
 }

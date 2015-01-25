@@ -1,20 +1,14 @@
 package edu.game.client;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
-import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
-import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-import edu.game.client.event.GameOverEvent;
-import edu.game.client.event.MoveEvent;
-import edu.game.client.event.ScoreEvent;
-import edu.game.client.event.newPlayerEvent;
-import edu.game.client.event.removePlayerEvent;
 import edu.game.client.gui.ClientGUI;
 
 
@@ -29,6 +23,7 @@ public class ClientImpl implements ClientInt{
 
 	private ClientGUI 	_vue;
 	private byte 		_myID;
+	private Reconnector _connector;
 
 	public ClientImpl(String url) {
 		System.out.println("url : "+url);
@@ -38,29 +33,6 @@ public class ClientImpl implements ClientInt{
 		this._vue = new ClientGUI(this);
 
 		// Init du Serveur Pushing
-		RemoteEventService remote = RemoteEventServiceFactory.getInstance().getRemoteEventService();
-		remote.addListener(GreetingService.SERVER_MESSAGE_DOMAIN, new RemoteEventListener() {
-			@Override
-			public void apply(Event anEvent) {
-				if(anEvent instanceof MoveEvent){ 			// If Event on movement of players
-					//_trace("Event : new Movement");
-					_vue.updateGrid(((MoveEvent)anEvent).getGrid());
-				}else if (anEvent instanceof ScoreEvent){ 	// If event on update of score
-					_vue.updateScore(((ScoreEvent)anEvent).getScore());
-				}else if (anEvent instanceof GameOverEvent){ // If event on End Game
-					_vue.showEndGame(((GameOverEvent)anEvent).getMessage());
-					_myID=-1;
-					_vue.setNameOfPlayer((byte)-1);
-					getGrid();
-				}else if (anEvent instanceof newPlayerEvent){
-					_vue.addNewPlayer(((newPlayerEvent) anEvent).getID(),((newPlayerEvent) anEvent).getCoord());
-				}else if (anEvent instanceof removePlayerEvent){
-					_vue.removeAplayer(((removePlayerEvent) anEvent).getID(),((removePlayerEvent) anEvent).getCoord());
-				}else{
-					System.err.println("Erreur RemoteEventService::Apply");
-				}
-			}
-		});
 
 		// Add Listener on Closing window
 		Window.addWindowClosingHandler(new Window.ClosingHandler() {
@@ -70,10 +42,30 @@ public class ClientImpl implements ClientInt{
 			}
 		});
 
-		_myID=-1;
-		getGrid();
+		// Test the connectivity with the server 
+		_connector = new Reconnector(_vue,this);
+		final Timer timer = new Timer() {
+			@Override
+			public void run() {
+				final RemoteEventService remoteEventService = RemoteEventServiceFactory.getInstance()
+						.getRemoteEventService();
+				if (remoteEventService.isActive()) {
+					_vue.showProblem("");
+					_connector.resetCounter();
+					schedule(2000);
+				} else {
+					_vue.showProblem("Connection to the server failed");
+					_connector.reconnect();
+					schedule(1000);
+				}
+			}
+		};
+		timer.schedule(1000);
+
+		isOver();
 		getScore();
 	}
+
 
 	/**
 	 * Register with the server
@@ -168,18 +160,24 @@ public class ClientImpl implements ClientInt{
 		}
 
 		@Override
-		public void onSuccess(Object result) {
+		public void onSuccess(Object result) {		
 			if(result instanceof byte[][]){	
 				_vue.updateGrid((byte[][])result);
 			}else if (result instanceof Boolean){
-				// TODO 
+				Boolean val = (Boolean) result;
+				//if(!val) _connector.reconnect();
 			}else if (result instanceof short[]){
 				_vue.updateScore((short[])result);
 			}else{
 				_trace("DefaultCallBack Nothing");
 			}
 		}
+	}
 
+
+	public void isOver() {
+		_myID=-1;
+		getGrid();
 	}
 
 }

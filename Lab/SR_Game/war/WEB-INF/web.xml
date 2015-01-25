@@ -28,7 +28,8 @@
   <url-pattern>/sr_game/gwteventservice</url-pattern>
 </servlet-mapping>
   
- 
+<!-- Active Distributable mod -->
+ <distributable/>
 
   
   <!-- Default page to serve -->

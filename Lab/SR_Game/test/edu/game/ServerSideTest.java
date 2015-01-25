@@ -169,7 +169,7 @@ public class ServerSideTest {
 		for(int k=0;k<100;k++){
 			int nbCookies = 0;
 			int nbMines = 0;
-			_server.init();
+			_server.initGame();
 			for(int i =0;i<GreetingServiceImpl._gridx;i++){
 				for(int j=0;j<GreetingServiceImpl._gridy;j++){
 					byte pos = grid[i][j];

@@ -18,10 +18,10 @@ public interface GreetingService extends RemoteService {
 	void disconnectMe(byte myID) throws Exception;
 	
 	// Different Move offered to Client
-	boolean moveUp(byte myID);
-	boolean moveDown(byte myID);
-	boolean moveLeft(byte myID);
-	boolean moveRight(byte myID);
+	Boolean moveUp(byte myID);
+	Boolean moveDown(byte myID);
+	Boolean moveLeft(byte myID);
+	Boolean moveRight(byte myID);
 	
 	// Test between us
 	byte[][] getGrid();
