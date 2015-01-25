@@ -1,4 +1,3 @@
-# ESIR_MorKaneGame
 <h1>~~~ Morgane Game ~~~</h1>
 Projet réalisé durant la dernière année en école d'ingénierie logiciel pour la validation de la formation sur les systèmes répartis.
 
